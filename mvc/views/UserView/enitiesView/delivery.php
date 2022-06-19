@@ -109,9 +109,15 @@
                             <h4 class=" mb-2" style="color: #2b68ba"> Ngày đặt: '.$set_bill_user[$key]['dateOrder'].' </h4>
                             <p class="text-muted mb-2"> Order ID:'.$set_bill_user[$key]['idBill'].'  <span class="fw-bold text-body"></span></p>
                             <p class="text-muted mb-0"> Địa chỉ nhận hàng: '.$set_bill_user[$key]['address'].' <span class="fw-bold text-body"></span> </p>
+                            <p style="color: green">Phản hồi: 
+                            ';
+                            if($set_bill_user[$key]['statusAccept'] != null ){
+                              echo $set_bill_user[$key]['respone'];
+                            }
+                            echo'</p>
                           </div>
                           <div>
-                            <h6 class="mb-0"> <a href="#">';if($set_bill_user[$key]['statusAccept'] == 0){echo "Chưa xác nhận";} else{echo "Đã xác nhận, chờ nhận hàng";}  echo '</a> </h6>
+                            <h6 class="mb-0"> <a href="#">';if($set_bill_user[$key]['statusAccept'] == 0){echo "Chưa xác nhận";} else if($set_bill_user[$key]['statusAccept'] == 1 && $set_bill_user[$key]['statusDelivery']!= 1 ){echo "Đã xác nhận, chờ nhận hàng";}else{echo "Đã vận chuyển thành công";}  echo '</a> </h6>
                           </div>
                         </div>
                       </div> ';
@@ -148,9 +154,11 @@
                         <li class="step0 active" id="step1"><span
                             style="margin-left: 22px; margin-top: 12px;">Đặt hàng</span></li>
 
-                        <li class="step0 '; if($set_bill_user[$key]['statusAccept'] == 1){echo "active";} echo' text-center" id="step2"><span>Duyệt hàng</span></li>
+                        <li class="step2 '; if($set_bill_user[$key]['statusAccept'] == 1){echo " active";} echo' text-center" id="step2"><span>Duyệt hàng</span></li>
 
-                        <li class="step0 text-muted text-end" id="step3"><span
+                        <li class="step3 text-muted text-end ';
+                        if($set_bill_user[$key]['statusDelivery'] == 1){echo "active";}
+                        echo'" id="step3"><span
                             style="margin-right: 22px;">Quá trình vận chuyển</span></li>
                       </ul>
                         <div class="card-footer p-4">

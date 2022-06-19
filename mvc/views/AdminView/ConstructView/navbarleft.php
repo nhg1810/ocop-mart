@@ -34,12 +34,16 @@
           <li class="nav-item">
             <a class="nav-link" data-toggle="collapse" href="#charts" aria-expanded="false" aria-controls="charts">
               <i class="icon-bar-graph menu-icon"></i>
-              <span class="menu-title">Charts</span>
+              <span class="menu-title">Quản lý đơn hàng</span>
               <i class="menu-arrow"></i>
             </a>
             <div class="collapse" id="charts">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="pages/charts/chartjs.html">ChartJs</a></li>
+                <li class="nav-item"> <a class="nav-link" href="admin/acceptProduct/quan-ly-cac-don-hang">Tất cả</a></li>
+                <li class="nav-item"> <a class="nav-link" href="admin/billaccepting/quan-ly-cac-don-hang">Đã duyệt</a></li>
+                <li class="nav-item"> <a class="nav-link" href="admin/billcancelling/quan-ly-cac-don-hang">Không duyệt</a></li>
+
+
               </ul>
             </div>
           </li>

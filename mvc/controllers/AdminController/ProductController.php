@@ -8,7 +8,8 @@ class product extends Controller{
     }
 
     function quanly(){
-        if($this->ProductModel->GetAllTheFaceProduct() == false||$this->ProductModel->GetAllSpecialProduct()==false||$this->ProductModel->GetAllCategory() == false || $this->ProductModel->GetAllProd() == false){
+        if($this->ProductModel->GetAllTheFaceProduct() == false||
+        $this->ProductModel->GetAllSpecialProduct()==false||$this->ProductModel->GetAllCategory() == false || $this->ProductModel->GetAllProd() == false){
             // in ra trang lỗi
         }else{
             $rs_the_face_prod = $this->ProductModel->GetAllTheFaceProduct();

@@ -56,7 +56,7 @@ class cart extends Controller{
                 for ($cart_prod = array (); $row = $rs_prod_cart->fetch_assoc(); $cart_prod[] = $row);
                 foreach($cart_prod as $key => $value){
                     foreach($value as $k => $vl){
-                        echo $cart_prod[$key]['priceProduct'] - ($cart_prod[$key]['sale'] / 100 *$cart_prod[$key]['priceProduct']) ;
+                        echo ( $cart_prod[$key]['priceProduct'] - ($cart_prod[$key]['sale'] / 100 * $cart_prod[$key]['priceProduct']) ) * $cart_prod[$key]['countProduct'] ;
                         break;
                     }}
             }
