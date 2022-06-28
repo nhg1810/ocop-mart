@@ -69,7 +69,9 @@ class cart extends Controller{
             for ($id_user = array (); $row = $rs_id_user->fetch_assoc(); $id_user[] = $row);
             $idUser= $id_user[0]['idAccount'];
             if(isset($_POST['idBillCurrent'])){
-                $rs_create_bill = $this->CartModel->CreateBill($_POST['idBillCurrent'], $idUser);
+                $phone = $_POST['phoneOrder'];
+                $address = $_POST['addressOrder'];
+                $rs_create_bill = $this->CartModel->CreateBill($_POST['idBillCurrent'], $idUser,$phone, $address);
                 if($rs_create_bill != false){
                     echo true;
                 }

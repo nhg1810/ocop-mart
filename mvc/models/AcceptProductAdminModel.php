@@ -9,8 +9,9 @@ class AcceptProductAdminModel{
     {
         $qr="SELECT * FROM tbl_bill INNER JOIN tbl_orders ON tbl_orders.idBill = tbl_bill.idBill
          INNER JOIN tbl_account ON tbl_account.idAccount = tbl_bill.idUser 
-         INNER JOIN tbl_product ON tbl_product.idProduct = tbl_orders.idProd ORDER BY tbl_orders.dateOrder desc
-         WHERE tbl_bill.statusAccept = 0;";
+         INNER JOIN tbl_product ON tbl_product.idProduct = tbl_orders.idProd 
+         WHERE tbl_bill.statusAccept = '0'
+         ORDER BY tbl_orders.dateOrder desc";
         $result = $this->db->select($qr);
         if($result == false){
             return false;

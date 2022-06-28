@@ -173,17 +173,17 @@
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
-    $(document).ready(function () {
-        function formatNumber (num) {
-                return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
-            }
+    $(document).ready(function() {
+        function formatNumber(num) {
+            return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1,")
+        }
         var arr_id_cart = [];
-        var arr_id_prod= [];
+        var arr_id_prod = [];
         var arr_count_prod = [];
-        $('.checked_payment').change(function () {
+        $('.checked_payment').change(function() {
             id_card = $(this).attr('id-card');
-            id_cart_prod=$(".data-id-prod-"+id_card+"").val();
-            count_cart_prod = $(".count-prod-"+id_card+"").val();
+            id_cart_prod = $(".data-id-prod-" + id_card + "").val();
+            count_cart_prod = $(".count-prod-" + id_card + "").val();
             if ($(this).prop('checked')) {
                 //nếu tích chọn thêm mặt hàng vào mục thanh toán
                 arr_id_cart.push(id_card);
@@ -193,8 +193,10 @@
                 $.ajax({
                     url: 'cart/AjaxGetProdByIdCart',
                     type: "POST",
-                    data: { id_card: id_card },
-                    success: function (data) {
+                    data: {
+                        id_card: id_card
+                    },
+                    success: function(data) {
                         $(".contain-orderies").append(data);
                         Swal.fire({
                             position: 'top-end',
@@ -211,8 +213,8 @@
                 for (var i = 0; i < arr_id_cart.length; i++) {
                     if (arr_id_cart[i] === id_card) {
                         arr_id_cart.splice(i, 1);
-                        arr_id_prod.splice(i,1);
-                        arr_count_prod.splice(i,1);
+                        arr_id_prod.splice(i, 1);
+                        arr_count_prod.splice(i, 1);
                         $("#cart-" + id_card + "").remove();
                         i--;
                         Swal.fire({
@@ -226,7 +228,7 @@
                 }
             }
             // console.log(arr_count_prod);
-            $("#sum-order").html(arr_id_cart.length  +  " sản phẩm");
+            $("#sum-order").html(arr_id_cart.length + " sản phẩm");
 
             var sum_price_prod = 30000;
             for (var i = 0; i < arr_id_cart.length; i++) {
@@ -234,8 +236,10 @@
                 $.ajax({
                     url: 'cart/AjaxGetPriceByIdCart',
                     type: "POST",
-                    data: { id_card: id_card },
-                    success: function (data) {
+                    data: {
+                        id_card: id_card
+                    },
+                    success: function(data) {
                         sum_price_prod += parseInt(data);
                         $("#sum-payment").html(formatNumber(sum_price_prod) + " đồng");
                     }
@@ -243,71 +247,94 @@
             }
             // console.log(arr_id_prod);
         });
-         //xử lý duyệt hàng, mặt hàng nào được tích chọn được lưu vào một mảng, duyệt từng mảng đó và thêm vào csdl
-        $(".order-user").click(function(){
-            if(arr_id_cart.length == 0){
-                Swal.fire(
-                'Chưa chọn mặt hàng thanh toán?',
-                'Bạn chưa chọn mặt hàng trong GIỎ HÀNG để Đặt Mua !',
-                'question'
-                )
-            }else{
-                //tạo một bill sau đó thêm trong bill các mặt hàng thanh toán cùng 1 lúc
-                var idBillCurrent = Math.floor(Math.random() * 100000);
-                $.ajax({
-                    url: 'cart/AjaxCreateBillCurrent',
-                    type: "POST",
-                    data: { idBillCurrent: idBillCurrent },
-                    success: function (data) {
-                       if(data == true){
-                        // sau khi đã tạo đc bill rồi, thì ứng với id bill sẽ là các mặt hàng mà khách hàng đã tích chọn
-                        for(i = 0; i<arr_id_cart.length; i++){
-                            $.ajax({
-                                url: 'cart/AjaxCreateOrder',
-                                type: "POST",
-                                data: { idBillCurrent: idBillCurrent, arr_id_prod: arr_id_prod[i], count_prod:arr_count_prod[i] },
-                                success: function (data) {
-                                    if(data == true){
-                                    }else{
-                                        // lỗi khi tạo order
-                                        alert(data);
-                                    }
-                                }
-                            })
-                        }
-                        Swal.fire({
-                                position: 'top-end',
-                                icon: 'success',
-                                title: 'Đặt hàng, thành công. Chờ chúng tôi duyệt nhé! Hãy kiểm tra trong Mục Đơn Của Bạn. Chúng tôi sẽ liên hệ với bạn sớm nhất !',
-                                showConfirmButton: false,
-                                timer: 1500
-                            })
-                        //xoá sản phẩm trong cart ở đây
-                        for(i = 0; i<arr_id_cart.length; i++){
-                            $.ajax({
-                                url: 'cart/AjaxDelProdInCart',
-                                type: "POST",
-                                data: {id_cart_del: arr_id_cart[i] },
-                                success: function (data) {
-                                    if(data == 1){
-                                        Swal.fire('Đợi chúng tôi duyệt hàng nhé !');
-                                        setTimeout(function () { window.location.reload(1); }, 1500);
-
-                                    }else{
-                                        // lỗi khi Xoá Sản phẩm trong cart order
-                                        alert(data);
-                                    }
-                                }
-                            })
-                        }
-                       }else{
-                        //lỗi khi tạo bill
-                        alert(data );
-                       }
-                    }
+        //xử lý duyệt hàng, mặt hàng nào được tích chọn được lưu vào một mảng, duyệt từng mảng đó và thêm vào csdl
+        $(".order-user").click(function() {
+            var nameOder = $("#cname").val();
+            var phoneOrder = $("#cnum").val();
+            var addressOrder = $("#caddress").val();
+            if (nameOder == "" || phoneOrder == "" || addressOrder == "") {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Lỗi',
+                    text: 'Các thông tin đặt hàng đang trống!',
+                    footer: '<a href="#">Vui lòng thử lại</a>'
                 })
-              
+            } else {
+                // alert(nameOder);
+                if (arr_id_cart.length == 0) {
+                    Swal.fire(
+                        'Chưa chọn mặt hàng thanh toán?',
+                        'Bạn chưa chọn mặt hàng trong GIỎ HÀNG để Đặt Mua !',
+                        'question'
+                    )
+                } else {
+                    //tạo một bill sau đó thêm trong bill các mặt hàng thanh toán cùng 1 lúc
+                    var idBillCurrent = Math.floor(Math.random() * 100000);
+                    $.ajax({
+                        url: 'cart/AjaxCreateBillCurrent',
+                        type: "POST",
+                        data: {
+                            idBillCurrent: idBillCurrent, phoneOrder:phoneOrder, addressOrder:addressOrder
+                        },
+                        success: function(data) {
+                            if (data == true) {
+                                // sau khi đã tạo đc bill rồi, thì ứng với id bill sẽ là các mặt hàng mà khách hàng đã tích chọn
+                                for (i = 0; i < arr_id_cart.length; i++) {
+                                    $.ajax({
+                                        url: 'cart/AjaxCreateOrder',
+                                        type: "POST",
+                                        data: {
+                                            idBillCurrent: idBillCurrent,
+                                            arr_id_prod: arr_id_prod[i],
+                                            count_prod: arr_count_prod[i]
+                                        },
+                                        success: function(data) {
+                                            if (data == true) {} else {
+                                                // lỗi khi tạo order
+                                                alert(data);
+                                            }
+                                        }
+                                    })
+                                }
+                                Swal.fire({
+                                    position: 'top-end',
+                                    icon: 'success',
+                                    title: 'Đặt hàng, thành công. Chờ chúng tôi duyệt nhé! Hãy kiểm tra trong Mục Đơn Của Bạn. Chúng tôi sẽ liên hệ với bạn sớm nhất !',
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                })
+                                //xoá sản phẩm trong cart ở đây
+                                for (i = 0; i < arr_id_cart.length; i++) {
+                                    $.ajax({
+                                        url: 'cart/AjaxDelProdInCart',
+                                        type: "POST",
+                                        data: {
+                                            id_cart_del: arr_id_cart[i]
+                                        },
+                                        success: function(data) {
+                                            if (data == 1) {
+                                                Swal.fire('Đợi chúng tôi duyệt hàng nhé !');
+                                                setTimeout(function() {
+                                                    window.location.reload(1);
+                                                }, 1500);
+
+                                            } else {
+                                                // lỗi khi Xoá Sản phẩm trong cart order
+                                                alert(data);
+                                            }
+                                        }
+                                    })
+                                }
+                            } else {
+                                //lỗi khi tạo bill
+                                alert(data);
+                            }
+                        }
+                    })
+
+                }
             }
+
         })
 
         // xoá mặt hàng đã chọn trong bản cart
@@ -334,25 +361,25 @@
         </div>
     </div>
     <?php
-    if(isset($data['rs_cart'])){
+    if (isset($data['rs_cart'])) {
         $rs_cart = $data['rs_cart'];
-        foreach($rs_cart as $key => $value){
-            foreach($value as $k => $vl){
+        foreach ($rs_cart as $key => $value) {
+            foreach ($value as $k => $vl) {
                 echo '<div class="row d-flex justify-content-center border-top">
                 <div class="col-5">
                     <div class="row d-flex">
                         <div class="book">
                             <div class="chosse-payment">
-                                <input type="hidden" class = "count-prod-'. $rs_cart[$key]["idCard"].' " value= "'.$rs_cart[$key]["countProduct"].' " >
-                                <input type="hidden" class ="data-id-prod-'.$rs_cart[$key]["idCard"].' " value = "'.$rs_cart[$key]["idProduct"].'">
-                                <input type="checkbox" class="checked_payment" id-card="'.$rs_cart[$key]["idCard"].'" name="checked_payment" value="'.$rs_cart[$key]["idCard"].'" style="width: 30px; height: 30px">
+                                <input type="hidden" class = "count-prod-' . $rs_cart[$key]["idCard"] . ' " value= "' . $rs_cart[$key]["countProduct"] . ' " >
+                                <input type="hidden" class ="data-id-prod-' . $rs_cart[$key]["idCard"] . ' " value = "' . $rs_cart[$key]["idProduct"] . '">
+                                <input type="checkbox" class="checked_payment" id-card="' . $rs_cart[$key]["idCard"] . '" name="checked_payment" value="' . $rs_cart[$key]["idCard"] . '" style="width: 30px; height: 30px">
                                 <label for="vehicle1">Click chọn để thanh toán</label><br>
                             </div>
-                            <img src="./mvc/public/ImgProduct/'.$rs_cart[$key]["imgProd1"].'" class="book-img">
+                            <img src="./mvc/public/ImgProduct/' . $rs_cart[$key]["imgProd1"] . '" class="book-img">
                         </div>
                         <div class="my-auto flex-column d-flex pad-left">
-                            <h6 class="mob-text" style="background: #546758; color: white" >'.$rs_cart[$key]["nameProduct"].'</h6>
-                            <p class="mob-text" style="background: #71f58a"> '.$rs_cart[$key]["brand"].'</p>
+                            <h6 class="mob-text" style="background: #546758; color: white" >' . $rs_cart[$key]["nameProduct"] . '</h6>
+                            <p class="mob-text" style="background: #71f58a"> ' . $rs_cart[$key]["brand"] . '</p>
                         </div>
                     </div>
                 </div>
@@ -363,18 +390,19 @@
                         </div>
                         <div class="col-4" style="margin-right: 20px">
                             <div class="row d-flex justify-content-end px-3">
-                                <p class="mb-0" id="cnt1">'.$rs_cart[$key]["countProduct"].'</p>
+                                <p class="mb-0" id="cnt1">' . $rs_cart[$key]["countProduct"] . '</p>
                                 
                             </div>
                         </div>
                         <div class="col-1">
-                            <h6 class="mob-text" style=" width: 50%; margin-left: 50px;">'.number_format($rs_cart[$key]["priceProduct"]).' đồng</h6>
+                            <h6 class="mob-text" style=" width: 50%; margin-left: 50px;">' . number_format($rs_cart[$key]["priceProduct"]) . ' đồng</h6>
                         </div>
                     </div>
                 </div>
             </div>';
                 break;
-            }}
+            }
+        }
     }
     ?>
     <!-- đổ sản phẩm ở giỏ hàng ra ở đây -->
@@ -389,8 +417,7 @@
                     <div class="col-lg-3 radio-group">
 
                         <div class="row d-flex px-3 radio">
-                            <img class="pay" style="width: 50px; height: 50px"
-                                src="./mvc/public/ImgInterfaceDefault/imglogo/delivery-man.png">
+                            <img class="pay" style="width: 50px; height: 50px" src="./mvc/public/ImgInterfaceDefault/imglogo/delivery-man.png">
                             <p class="my-auto">Thanh Toán Nhận Hàng</p>
                         </div>
                     </div>
@@ -398,26 +425,28 @@
                         <div class="row px-2">
                             <div class="form-group col-md-6">
                                 <label class="form-control-label">Tên Người Đặt</label>
-                                <input type="text" id="cname" name="cname" placeholder="tên người đặt"
-                                    value="<?php if(isset($_COOKIE['name'])){echo $_COOKIE['name'];}?>">
+                                <input type="text" id="cname" name="cname" placeholder="tên người đặt" value="<?php if (isset($_COOKIE['name'])) {
+                                                                                                                    echo $_COOKIE['name'];
+                                                                                                                } ?>">
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="form-control-label">Số Điện Thoại</label>
-                                <input type="text" id="cnum" name="cnum" placeholder="số điện thoại"
-                                    value="0<?php if(isset($_COOKIE['sdt'])){echo $_COOKIE['sdt'];}?>">
+                                <input type="text" id="cnum" name="cnum" placeholder="số điện thoại" value="0<?php if (isset($_COOKIE['sdt'])) {
+                                                                                                                    echo $_COOKIE['sdt'];
+                                                                                                                } ?>">
                             </div>
                         </div>
                         <div class="row px-2">
                             <div class="form-group col-md-6">
                                 <label class="form-control-label">Địa Chỉ Nhận Hàng(Chỉ trong Đà Nẵng và Quảng
                                     Nam)</label>
-                                <input type="text" id="exp" name="exp" placeholder="địa chỉ nhận hàng"
-                                    value="<?php if(isset($_COOKIE['address'])){echo $_COOKIE['address'];}?>">
+                                <input type="text" id="caddress" name="exp" placeholder="địa chỉ nhận hàng" value="<?php if (isset($_COOKIE['address'])) {
+                                                                                                                        echo $_COOKIE['address'];
+                                                                                                                    } ?>">
                             </div>
                             <div class="form-group col-md-6">
                                 <label class="form-control-label">Phương Thức Thanh Toán</label>
-                                <input type="text" id="cvv" name="cvv" placeholder="Thanh toán khi nhận hàng"
-                                    readonly="true">
+                                <input type="text" id="cvv" name="cvv" placeholder="Thanh toán khi nhận hàng" readonly="true">
                             </div>
                         </div>
                     </div>
@@ -430,9 +459,9 @@
 
 
 
-                        <button class="btn-block btn-blue order-user" >
+                        <button class="btn-block btn-blue order-user">
                             <span>
-                                <span id="checkout" >Đặt Hàng</span>
+                                <span id="checkout">Đặt Hàng</span>
                             </span>
                         </button>
                         <div class="row d-flex justify-content-between px-4">
@@ -450,19 +479,19 @@
     </div>
 </div>
 <script>
-    $(document).ready(function () {
+    $(document).ready(function() {
 
-        $('.radio-group .radio').click(function () {
+        $('.radio-group .radio').click(function() {
             $('.radio').addClass('gray');
             $(this).removeClass('gray');
         });
 
-        $('.plus-minus .plus').click(function () {
+        $('.plus-minus .plus').click(function() {
             var count = $(this).parent().prev().text();
             $(this).parent().prev().html(Number(count) + 1);
         });
 
-        $('.plus-minus .minus').click(function () {
+        $('.plus-minus .minus').click(function() {
             var count = $(this).parent().prev().text();
             $(this).parent().prev().html(Number(count) - 1);
         });

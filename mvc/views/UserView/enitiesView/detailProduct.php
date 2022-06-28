@@ -160,13 +160,12 @@
                                 <div class="product__item">
                                     <div class="product__item__pic set-bg" data-setbg="./mvc/public/ImgProduct/'.$set_relative_product[$key]['imgProd1'].'">
                                         <ul class="product__item__pic__hover">
-                                            <li><a href="#"><i class="fa fa-heart"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-retweet"></i></a></li>
-                                            <li><a href="#"><i class="fa fa-shopping-cart"></i></a></li>
+                                            <li><a href="detailProd/sanpham/'.$set_relative_product[$key]['slug'].'/'.$set_relative_product[$key]['idProduct'].'"><i class="fa fa-shopping-cart"></i></a></li>
+                                           
                                         </ul>
                                     </div>
                                     <div class="product__item__text">
-                                        <h6><a href="#">'.$set_relative_product[$key]['nameProduct'].'</a></h6>
+                                        <h6><a href="detailProd/sanpham/'.$set_relative_product[$key]['slug'].'/'.$set_relative_product[$key]['idProduct'].' ">'.$set_relative_product[$key]['nameProduct'].'</a></h6>
                                         <h5>'.number_format($set_relative_product[$key]['priceProduct']).' đồng</h5>
                                     </div>
                                 </div>

@@ -51,9 +51,11 @@ class CartModel{
           return $result;
         }
     }
-    public function CreateBill($idBill, $idUser)
+    public function CreateBill($idBill, $idUser, $phone, $address)
     {
-      $qr="INSERT INTO `tbl_bill` (`idBill`, `statusAccept`, `dateAccept`, `respone`, `idUser`) VALUES ('".$idBill."', '0', NULL, '', '".$idUser."');";
+      $qr="INSERT INTO 
+      `tbl_bill` (`idBill`, `statusAccept`, `dateAccept`, `respone`, `idUser`, `phoneOrder`, `addressOrder`) 
+      VALUES ('".$idBill."', '0', NULL, '', '".$idUser."', '".$phone."', '".$address."' );";
       $result = $this->db->insert($qr);
       if($result == false){
           return false;

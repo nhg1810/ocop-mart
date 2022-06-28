@@ -20,7 +20,7 @@ class DetailProdModel{
     public function GetRelativeProd($id_prod)
     {
        
-        $qr="SELECT * FROM tbl_category INNER JOIN tbl_product ON tbl_product.idCateProduct = tbl_category.idCategory WHERE tbl_product.idProduct < '$id_prod' ORDER BY tbl_product.idProduct LIMIT 4;";
+        $qr="SELECT * FROM tbl_category INNER JOIN tbl_product ON tbl_product.idCateProduct = tbl_category.idCategory WHERE tbl_product.idProduct <= '$id_prod' ORDER BY tbl_product.idProduct LIMIT 4;";
         $result = $this->db->select($qr);
         if($result == false){
             return false;
