@@ -113,7 +113,7 @@
                             $set_cate_prod = $data['set_cate_prod'];
                             foreach ($set_cate_prod as $key => $value) {
                                 foreach ($value as $k => $vl) {
-                                    echo ' <li><a href="shop/GetProdByIdCategory/'.$set_cate_prod[$key]['idCategory'].'/1">' . $set_cate_prod[$key]['nameCategory'] . '</a></li>';
+                                    echo ' <li><a href="shop/GetProdByIdCategory/' . $set_cate_prod[$key]['idCategory'] . '/1">' . $set_cate_prod[$key]['nameCategory'] . '</a></li>';
                                     break;
                                 }
                             }
@@ -182,7 +182,7 @@
                                 $set_cate_prod = $data['set_cate_prod'];
                                 foreach ($set_cate_prod as $key => $value) {
                                     foreach ($value as $k => $vl) {
-                                        echo ' <li><a href="shop/GetProdByIdCategory/'.$set_cate_prod[$key]['idCategory'] .'/1">' . $set_cate_prod[$key]['nameCategory'] . '</a></li>';
+                                        echo ' <li><a href="shop/GetProdByIdCategory/' . $set_cate_prod[$key]['idCategory'] . '/1">' . $set_cate_prod[$key]['nameCategory'] . '</a></li>';
                                         break;
                                     }
                                 }
@@ -262,7 +262,7 @@
                         </div>
                         <div class="col-lg-4 col-md-4">
                             <div class="filter__found">
-                            <h6><span><?php if(isset($data['set_sum_prod'])){echo $data['set_sum_prod'][0]['countProd'];}else{echo 0;}?></span> Sản phẩm tìm được</h6>
+                                <h6><span><?php if(isset($data['set_sum_prod_by_cate'])){echo $data['set_sum_prod_by_cate'][0]['countProd'];}else{echo 0;}?></span> Sản phẩm tìm được</h6>
                             </div>
                         </div>
                         <div class="col-lg-4 col-md-3">
@@ -272,6 +272,71 @@
                             </div>
                         </div>
                     </div>
+                </div>
+              
+                <!-- tất cả sản phẩm ở đây -->
+                <div class="row">
+                    <?php
+                    if (isset($data['set_all_prod_by_cate'])) {
+                        $set_all_prod_by_cate = $data['set_all_prod_by_cate'];
+                        if (isset($set_all_prod_by_cate[0]['idProduct'])) {
+                            foreach ($set_all_prod_by_cate as $key => $value) {
+                                foreach ($value as $k => $vl) {
+                                    echo '<div class="col-lg-4 col-md-6 col-sm-6 ">
+                        <div class="product__item">
+                            <div class="product__item__pic set-bg" data-setbg="./mvc/public/ImgProduct/' . $set_all_prod_by_cate[$key]['imgProd1'] . '">
+                                <div class="sale-percent">Giảm giá: ' . $set_all_prod_by_cate[$key]['sale'] . '%</div>
+                                <ul class="product__item__pic__hover">
+                                    <li><a href="detailProd/sanpham/' . $set_all_prod_by_cate[$key]['slug'] . '/ ' . $set_all_prod_by_cate[$key]['idProduct'] . '"><i class="fa fa-eye"></i></a></li>
+                                </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6><a href="detailProd/sanpham/' . $set_all_prod_by_cate[$key]['slug'] . '/' . $set_all_prod_by_cate[$key]['idProduct'] . '">' . $set_all_prod_by_cate[$key]['nameProduct'] . '</a></h6>
+                                <b>Giá gốc:' . number_format($set_all_prod_by_cate[$key]['priceProduct']) . ' đồng </b>
+                                <h5>Giá chỉ: ' . number_format($set_all_prod_by_cate[$key]['priceProduct'] - ($set_all_prod_by_cate[$key]['sale'] / 100) * $set_all_prod_by_cate[$key]['priceProduct']) . ' đồng</h5>
+                                <p>Nguồn góc: ' . $set_all_prod_by_cate[$key]['brand'] . ' </p>
+                                <a class="show-inf" href="detailProd/sanpham/' . $set_all_prod_by_cate[$key]['slug'] . '/' . $set_all_prod_by_cate[$key]['idProduct'] . '">Xem ngay</a>
+
+                            </div>
+                        </div>
+                    </div>';
+                                    break;
+                                }
+                            }
+                        }
+                        else{
+                            echo  '<h2 style="color: #769645">'.$set_all_prod_by_cate.'</h2>';
+                        }
+                    }
+                    ?>
+
+                </div>
+              
+                <div class="product__pagination">
+                    <?php
+                    if (isset($data['set_sum_prod_by_cate'])) {
+                        $page_number = 0;
+                        $set_sum_prod_by_cate = $data['set_sum_prod_by_cate'];
+                        $x = (round($set_sum_prod_by_cate[0]['countProd'] / 6) - $set_sum_prod_by_cate[0]['countProd'] / 6);
+                        if ($x > 0) {
+                            $page_number = round($set_sum_prod_by_cate[0]['countProd'] / 6);
+                        } else {
+                            $page_number = round($set_sum_prod_by_cate[0]['countProd'] / 6) + 1;
+                        }
+                        for ($i = 1; $i <= $page_number; $i++) {
+                            echo '<a href="shop/GetProdByIdCategory/';
+                            if (isset($data['id_cate_gory'])) {
+                                echo $data['id_cate_gory'];
+                            }
+                            echo '/' . $i . '" 
+                            ';
+                            if ($data['pageNumber'] ==  $i) {
+                                echo 'style="background: #28a745; color: white"';
+                            }
+                            echo '>' . $i . '</a>';
+                        }
+                    }
+                    ?>
                 </div>
                 <div class="product__discount" style="margin-top: 50px">
                     <div class="section-title product__discount__title">
@@ -309,60 +374,6 @@
 
                         </div>
                     </div>
-                </div>
-                <!-- tất cả sản phẩm ở đây -->
-                <div class="row">
-                    <?php
-                    if (isset($data['set_all_prod'])) {
-                        $set_all_prod = $data['set_all_prod'];
-                        foreach ($set_all_prod as $key => $value) {
-                            foreach ($value as $k => $vl) {
-                                echo '<div class="col-lg-4 col-md-6 col-sm-6 ">
-                        <div class="product__item">
-                            <div class="product__item__pic set-bg" data-setbg="./mvc/public/ImgProduct/' . $set_all_prod[$key]['imgProd1'] . '">
-                                <div class="sale-percent">Giảm giá: ' . $set_all_prod[$key]['sale'] . '%</div>
-                                <ul class="product__item__pic__hover">
-                                    <li><a href="detailProd/sanpham/' . $set_all_prod[$key]['slug'] . '/ ' . $set_all_prod[$key]['idProduct'] . '"><i class="fa fa-eye"></i></a></li>
-                                </ul>
-                            </div>
-                            <div class="product__item__text">
-                                <h6><a href="detailProd/sanpham/' . $set_all_prod[$key]['slug'] . '/' . $set_all_prod[$key]['idProduct'] . '">' . $set_all_prod[$key]['nameProduct'] . '</a></h6>
-                                <b>Giá gốc:' . number_format($set_all_prod[$key]['priceProduct']) . ' đồng </b>
-                                <h5>Giá chỉ: ' . number_format($set_all_prod[$key]['priceProduct'] - ($set_all_prod[$key]['sale'] / 100) * $set_all_prod[$key]['priceProduct']) . ' đồng</h5>
-                                <p>Nguồn góc: ' . $set_all_prod[$key]['brand'] . ' </p>
-                                <a class="show-inf" href="detailProd/sanpham/' . $set_all_prod[$key]['slug'] . '/' . $set_all_prod[$key]['idProduct'] . '">Xem ngay</a>
-
-                            </div>
-                        </div>
-                    </div>';
-                                break;
-                            }
-                        }
-                    }
-                    ?>
-
-                </div>
-                <div class="product__pagination">
-                    <?php
-                    if (isset($data['set_sum_prod'])) {
-                        $page_number = 0;
-                        $set_sum_prod = $data['set_sum_prod'];
-                        $x = (round($set_sum_prod[0]['countProd'] / 6) - $set_sum_prod[0]['countProd'] / 6);
-                        if ($x > 0) {
-                            $page_number = round($set_sum_prod[0]['countProd'] / 6);
-                        } else {
-                            $page_number = round($set_sum_prod[0]['countProd'] / 6) + 1;
-                        }
-                        for ($i = 1; $i <= $page_number; $i++) {
-                            echo '<a href="shop/page/' . $i . '" 
-                            ';
-                            if ($data['pageNumber'] ==  $i) {
-                                echo 'style="background: #28a745; color: white"';
-                            }
-                            echo '>' . $i . '</a>';
-                        }
-                    }
-                    ?>
                 </div>
                 <div class="product__discount" style="margin-top: 50px">
                     <div class="section-title product__discount__title">

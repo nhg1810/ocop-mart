@@ -26,9 +26,12 @@ class detailProd extends Controller
 
             $rs_detail_prod = $this->detailProdModel->GetProdBySlug($slug_prod);
             for ($set_detail_product = array(); $row = $rs_detail_prod->fetch_assoc(); $set_detail_product[] = $row);
-
+            // echo  $set_detail_product[0]['nameProduct'];
             $this->view("mainView", [
                 "control" => "detailProduct",
+                "title_link"=>$set_detail_product[0]['nameProduct'],
+                "img_link"=>$set_detail_product[0]['imgProd1'],
+                "des_link"=>$set_detail_product[0]['descriptProduct'],
                 "set_relative_product" => $set_relative_product,
                 "set_detail_product" => $set_detail_product
             ]);

@@ -41,6 +41,21 @@ class ShopModel
       return $result;
     }
   }
+  public function GetAllProductByCategory($idCategory,$pageNumber)
+  {
+    $ld_page = ($pageNumber - 1) * 6;
+    $qr = "SELECT * FROM tbl_product INNER JOIN tbl_category ON 
+     tbl_product.idCateProduct = tbl_category.idCategory 
+     WHERE tbl_product.idCateProduct = '".$idCategory."'
+     ORDER BY tbl_product.idProduct ASC LIMIT 6 OFFSET $ld_page;";
+
+    $result = $this->db->select($qr);
+    if ($result == false) {
+      return false;
+    } else {
+      return $result;
+    }
+  }
   public function GetNewProduct()
   {
     $qr = "SELECT * FROM tbl_product INNER JOIN tbl_category ON tbl_product.idCateProduct = tbl_category.idCategory ORDER BY tbl_product.idProduct DESC LIMIT 3";
@@ -64,6 +79,17 @@ class ShopModel
   public function GetSumProduct()
   {
     $qr = "SELECT COUNT(idProduct) AS countProd FROM `tbl_product`;";
+    $result = $this->db->select($qr);
+    if ($result == false) {
+      return false;
+    } else {
+      return $result;
+    }
+  }
+  public function GetSumProductByCate($idCategory)
+  {
+    $qr = "SELECT COUNT(idProduct) AS countProd FROM `tbl_product` 
+    WHERE idCateProduct = '".$idCategory."' ;";
     $result = $this->db->select($qr);
     if ($result == false) {
       return false;
